@@ -93,40 +93,45 @@ void update(double** U){
 
 int main(int argc, char* argv[]){
 	FILE *file;
+	//init value for MPI
 	MPI_Init(&argc, &argv);
 	MPI_Comm_size(MPI_COMM_WORLD, &num_process);
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	//init value for python graph
 	PyObject *pName, *pModule, *pDict, *pFunc, *pValue;
+	//proc 0 init Py-values, because he create graph
 	if (rank == 0)
 		if (argc >= 3){
 			Py_Initialize();
 			PyRun_SimpleString("import sys"); 
-			PyRun_SimpleString("sys.path.append('/home/akdmol/Mipt_prog/Parallel/mpi_2/')");
+			PyRun_SimpleString("sys.path.append('....')");
 			pName = PyString_FromString(argv[1]);
 			pModule = PyImport_Import(pName);
 			pDict = PyModule_GetDict(pModule);
 			pFunc = PyDict_GetItemString(pDict, argv[2]);	
 		}
-	
+	//Results temperature
 	double *Res = (double*)malloc(aux_width * sizeof(double*));
 	for (i = 0; i < aux_width; ++i)
 		Res[i] = 0.0;
+	//distribute work-size for everyone process
 	if (rank != num_process - 1) chunk = aux_width / num_process;
 	else chunk = aux_width / num_process + aux_width - (aux_width / num_process) * num_process;
+	//temperature table
 	double **U = (double**)malloc(chunk * sizeof(double*));
 	for (i = 0; i < chunk; ++i)
 		U[i] = (double*)malloc(aux_height * sizeof(double));
-
+	//init values
 	for (i = 0; i < chunk; ++i)
 		for (j = 0; j < aux_height; ++j)
 			U[i][j] = u_0;	
+	//t - time of distrib temperature
 	double t = 0.0;
 	while(t < 60.0){
 		update(U);	
 		t += tau;
 	}
-
+	//proc 0 gets final temperature values from other process
 	if (rank != 0)
 		for (i = 0; i < chunk; ++i)
 			MPI_Send(&U[i][25], 1, MPI_DOUBLE, 0, 1, MPI_COMM_WORLD);
@@ -136,14 +141,17 @@ int main(int argc, char* argv[]){
 		for (j = 1; j < num_process; ++j)
 			for (i = 0; i < chunk; ++i)
 				MPI_Recv(&Res[chunk*j+i], 1, MPI_DOUBLE, j, 1, MPI_COMM_WORLD, &status);
+		//write values to file
 		file = fopen("res.txt", "w");
 		for (i = 1; i <= aux_width; ++i)		
 			fprintf(file, "%.3f:%.1f\n", i*h - h/2, Res[i-1]);
 		fclose(file);
+		//call graphic() from graph.py
 		if (PyCallable_Check(pFunc)){
 			PyObject_CallObject(pFunc, NULL);
 		}
 	}
+	//free memory
 	for (i = 0; i < chunk; ++i)
 		free(U[i]);
 	free(U);
