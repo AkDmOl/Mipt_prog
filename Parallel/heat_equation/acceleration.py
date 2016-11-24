@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 num = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 acceleration = []
 time = []
-f = open("time.txt", "r")
+f = open("fin_time.txt", "r")
 for line in f:
     time.append(float(line))
 for i in range(12):

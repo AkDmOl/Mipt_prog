@@ -102,6 +102,7 @@ int main(int argc, char* argv[]){
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	//init value for python graph
 	PyObject *pName, *pModule, *pDict, *pFunc, *pValue;
+	//proc 0 init Py-values, because he create graph
 	if (rank == 0)
 		if (argc >= 3){
 			Py_Initialize();
@@ -144,7 +145,6 @@ int main(int argc, char* argv[]){
 		for (j = 1; j < num_process; ++j)
 			for (i = 0; i < chunk; ++i)
 				MPI_Recv(&Res[chunk*j+i], 1, MPI_DOUBLE, j, 1, MPI_COMM_WORLD, &status);
-		//recv from last proc
 		size_t last_piece = (num_process - 1)*chunk + chunk;
 		for (i = last_piece; i < aux_width; ++i)
 			MPI_Recv(&Res[i], 1, MPI_DOUBLE, num_process - 1, 1, MPI_COMM_WORLD, &status);
@@ -153,7 +153,6 @@ int main(int argc, char* argv[]){
 		for (i = 1; i <= aux_width; ++i)		
 			fprintf(file, "%.3f:%.1f\n", i*h - h/2, Res[i-1]);
 		fclose(file);
-		//make graph of temperature
 		if (PyCallable_Check(pFunc)){
 			PyObject_CallObject(pFunc, NULL);
 			//free resources
@@ -161,6 +160,7 @@ int main(int argc, char* argv[]){
 			Py_DECREF(pName);
 		}
 	}
+	//free memory
 	for (i = 0; i < chunk; ++i)
 		free(U[i]);
 	free(U);
