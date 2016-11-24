@@ -10,8 +10,7 @@ def graphic():
         calc_x.append(float(split[0]))
         calc_U.append(float(split[1]))
     fig = plt.figure()
-    calc_x_r = calc_x[::-1]
-    plt.scatter(calc_x_r, calc_U, color = 'blue')
+    plt.scatter(calc_x, calc_U, color = 'blue')
     plt.scatter(x,U, color = 'red')
     plt.grid()
     plt.savefig('plot.png')
