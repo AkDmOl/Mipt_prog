@@ -1,16 +1,27 @@
 #include <iostream>
 
-class singleton{
+class Singleton{
 	public:
-		static singleton* init(){
-			if (!_instance)
-				return _instance;
+		static Singleton* init(){
+			if (!Singleton::_instance)
+				return Singleton::_instance;
 			else{
-				_instance = new singleton();
-				return _instance;
+				// ???
+				
 			}	
 		}
+		void life(){
+			std::cout<<"Hi";
+		}
 	private:
-		singleton();
-		static singleton* _instance;
+		Singleton();
+		static Singleton* _instance;
+};
+
+Singleton* Singleton::_instance = NULL;
+
+int main(){
+	Singleton* attempt = Singleton::init();
+	attempt->life();
+	return 0;
 }
