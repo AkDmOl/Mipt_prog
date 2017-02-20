@@ -18,11 +18,11 @@ class Singleton{
 				return Singleton::_instance;
 			};	
 		}
-		~Singleton(){
-			delete _instance;
-		}
 	private:
 		Singleton();
+		~Singleton(){
+			delete _instance;
+		};
 		static Singleton* _instance;
 };
 
