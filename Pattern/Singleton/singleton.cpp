@@ -2,6 +2,11 @@
 
 class Singleton{
 	public:
+		Singleton(const Singleton&) = delete;
+		Singleton &operator=(const Singleton&) = delete;
+		Singleton(Singleton&& ) = delete;
+		Singleton &operator=(Singleton&&) = delete;
+
 		static Singleton* init(){
 			if (Singleton::_instance != NULL){
 				std::cout << "second\n";
@@ -12,6 +17,9 @@ class Singleton{
 				Singleton::_instance = new Singleton();
 				return Singleton::_instance;
 			};	
+		}
+		~Singleton(){
+			delete _instance;
 		}
 	private:
 		Singleton();
