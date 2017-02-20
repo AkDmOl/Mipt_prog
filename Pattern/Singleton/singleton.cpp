@@ -6,8 +6,7 @@ class Singleton{
 			if (Singleton::_instance != NULL)
 				return Singleton::_instance;
 			else{
-				Singleton::_instance = new Singleton();
-				return Singleton::_instance;
+				//I should create Singleton, but.... Singleton() in private....
 			}	
 		}
 		void life(){
