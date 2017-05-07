@@ -1,8 +1,6 @@
-#include <Fleet.h>
+#include "Fleet.h"
 #include <stdlib.h> 
 #include <time.h>   
-
-fourDecker::fourDecker()
 
 Fleet::Fleet(std::string player)
 {
@@ -61,7 +59,7 @@ Fleet::Fleet(std::string player)
 			std::cin >> shipStart;
 			std::cout << "Введите координату конца одно-палубника";
 			std::cin >> shipEnd;
-			std::shared_ptr<oneDecker> oneMoreShip(new oneDecker(shipStart, shipEnd));
+			std::shared_ptr<oneDecker> oneMoreShip(new oneDecker(shipStart));
 			sea[shipStart[1] - '0'][shipStart[0] - 49 - '0'] = oneMoreShip;	
 		}
 	}
@@ -104,4 +102,52 @@ Fleet::Fleet(std::string player)
 		sea[4][4] = ninthShip;
 		sea[6][4] = tenthShip;
 	}
+}
+
+void Fleet::show()
+{
+	for (int i = 0; i < 10; ++i)
+	{
+		for(int j = 0; j < 10; ++j)
+			if (sea[i][j] == NULL)
+				std::cout << "~";
+			else
+				std::cout << "|";
+		std::cout << "\n";
+	}
+}
+
+int oneDecker::wound()
+{
+	--hp;
+	if (hp == 0)
+		death();
+	else
+		return 0;
+}
+
+int twoDecker::wound()
+{
+	--hp;
+	if (hp == 0)
+		death();
+	else
+		return 0;
+}
+int threeDecker::wound()
+{
+	--hp;
+	if (hp == 0)
+		death();
+	else
+		return 0;
+}
+
+int fourDecker::wound()
+{
+	--hp;
+	if (hp == 0)
+		death();
+	else
+		return 0;
 }
