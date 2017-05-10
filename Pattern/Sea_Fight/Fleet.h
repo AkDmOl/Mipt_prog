@@ -10,9 +10,10 @@ enum mode { Recce, Finish };
 class Ship
 {
 	public:	
-		//virtual void debris() = 0;
 		virtual condition damage() = 0;
-		virtual condition death() = 0;
+		virtual void death() = 0;
+		virtual std::string getStart() = 0;
+		virtual std::string getEnd() = 0;
 		virtual ~Ship() {};
 	protected:
 		Ship() {};
@@ -37,7 +38,9 @@ class oneDecker: public Ship
 	public:
 		oneDecker(std::string Start): hp(1), start(Start), end(Start) {};
 		condition damage();
-		condition death() { this->~oneDecker(); return KillOneDeck; };
+		void death() { this->~oneDecker(); };
+		std::string getStart() { return start; };
+		std::string getEnd() { return end; };
 		~oneDecker() {};
 	private:
 		int hp;
@@ -50,7 +53,9 @@ class twoDecker: public Ship
 	public:
 		twoDecker(std::string Start, std::string End): hp(2), start(Start), end(End) {};
 		condition damage();
-		condition death() { this->~twoDecker(); return KillTwoDeck; };
+		void death() { this->~twoDecker(); };
+		std::string getStart() { return start; };
+		std::string getEnd() { return end; };
 		~twoDecker() {};
 	private:
 		int hp;
@@ -63,7 +68,9 @@ class threeDecker: public Ship
 	public:
 		threeDecker(std::string Start, std::string End): hp(3), start(Start), end(End) {};
 		condition damage();
-		condition death() { this->~threeDecker(); return KillThreeDeck; };
+		void death() { this->~threeDecker();};
+		std::string getStart() { return start; };
+		std::string getEnd() { return end; };
 		~threeDecker() {};
 	private:
 		int hp;
@@ -76,7 +83,9 @@ class fourDecker: public Ship
 	public:
 		fourDecker(std::string Start, std::string End): hp(4), start(Start), end(End) {};
 		condition damage();
-		condition death() { this->~fourDecker(); return KillFourDeck; };
+		void death() { this->~fourDecker(); };
+		std::string getStart() { return start; };
+		std::string getEnd() { return end; };
 		~fourDecker() {};
 	private:
 		int hp;

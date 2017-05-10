@@ -19,16 +19,21 @@ void CompPlayer::showFleet()
 {
 	myFleet.show(shots);
 }
-/*
-std::shared_ptr<Ship> CompPlayer::getKilledShip(Player* p, std::string cell)
+
+std::shared_ptr<Ship> CompPlayer::returnChips(std::string cell)
+{
+	return myFleet.returnChips(cell);	
+}
+
+std::shared_ptr<Ship> CompPlayer::getKilledShip(std::shared_ptr<Player> p, std::string cell)
 {
 	return p->returnChips(cell);
 }
-*/
+
 condition CompPlayer::shot(std::shared_ptr<Player> p, mode mod = Recce)
 {
 	//some tactics for shot and mod
-	std::string cell = "a0";
+	std::string cell = "e0";
 	Aim shooter(p);
 	condition result = shooter.fire(cell);
 	//mark shot
@@ -38,13 +43,39 @@ condition CompPlayer::shot(std::shared_ptr<Player> p, mode mod = Recce)
 			shots[cell[1] - '0'][cell[0] - 49 - '0'] = Pop;	
 			return result;
 		case Wound:
-			shots[cell[1] - '0'][cell[0] - 49 - '0'] = result;	
+			shots[cell[1] - '0'][cell[0] - 49 - '0'] = Wound;	
 			return result;
 	}
+	//mark killed ships
+	auto killedShip = getKilledShip(p, cell);
 	
-	//mark killed ship
-	//std::shared_ptr<Ship> killedShip = getKilledShip(p, cell);
-	return Sea;
+	std::string start = killedShip->getStart();
+	std::string end = killedShip->getEnd();
+	int startI = start[1] - '0' - 1;
+	int startJ = start[0] - 49 - '0' - 1;
+	int endI = end[1] - '0' + 1;
+	int endJ = end[0] - 49 - '0' + 1;
+
+	if (startI == -1)
+		++startI;
+	if (startJ == -1)
+		++startJ;
+	if (endI == 10)
+		--endI;
+	if (endJ == 10)
+		--endJ;
+	for (int i = startI; i <= endI; ++i)
+	{
+		shots[i][startJ] = Wound;
+		shots[i][endJ] = Wound;
+	}
+	for (int j = startJ; j <= endJ; ++j)
+	{
+		shots[startI][j] = Wound;
+		shots[endI][j] = Wound;
+	}
+	//killedShip->death();	
+	return result;
 }
 
 condition CompPlayer::check(std::string cell)

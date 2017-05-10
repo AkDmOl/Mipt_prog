@@ -40,8 +40,9 @@ class CompPlayer : public Player
 	public:
 		CompPlayer();
 		condition shot(std::shared_ptr<Player> p, mode mod);
-		//std::shared_ptr<Ship> getKilledShip(Player* p, std::string cell);
+		std::shared_ptr<Ship> getKilledShip(std::shared_ptr<Player> p, std::string cell);
 		condition check(std::string cell);
+		std::shared_ptr<Ship> returnChips(std::string cell);
 		void killedShip() { --countShips; };
 		int getCountShips() { return countShips; };
 		void showFleet();

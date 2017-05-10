@@ -75,49 +75,49 @@ Fleet::Fleet(std::string player)
 			sea.push_back(row);
 		}
 
-		auto firstShip = std::make_shared<fourDecker>("a1", "a4");
+		auto firstShip = std::make_shared<fourDecker>("a0", "a3");
 		Cell deckOfShip = Cell(firstShip);
 		for (int i = 0; i < 4; ++i)
 			sea[i][0] = deckOfShip;
 
-		auto secondShip = std::make_shared<threeDecker>("c1", "c3");
+		auto secondShip = std::make_shared<threeDecker>("c0", "c2");
 		deckOfShip = Cell(secondShip);
 		for (int i = 0; i < 3; ++i)
 			sea[i][2] = deckOfShip;
 
-		auto thirdShip = std::make_shared<threeDecker>("c5","c7");
+		auto thirdShip = std::make_shared<threeDecker>("c4","c6");
 		deckOfShip = Cell(thirdShip);
 		for (int i = 4; i < 7; ++i)
 			sea[i][2] = deckOfShip;
 
-		auto fourthShip = std::make_shared<twoDecker>("a6", "a7");
+		auto fourthShip = std::make_shared<twoDecker>("a5", "a6");
 		deckOfShip = Cell(fourthShip);
 		sea[5][0] = deckOfShip;
 		sea[6][0] = deckOfShip;
 
-		auto fivthShip = std::make_shared<twoDecker>("a9", "a10");
+		auto fivthShip = std::make_shared<twoDecker>("a8", "a9");
 		deckOfShip = Cell(fivthShip);
 		sea[8][0] = deckOfShip;
 		sea[9][0] = deckOfShip;
 
-		auto sixthShip = std::make_shared<twoDecker>("c9", "c10");
+		auto sixthShip = std::make_shared<twoDecker>("c8", "c9");
 		deckOfShip = Cell(sixthShip);
 		sea[8][2] = deckOfShip;
 		sea[9][2] = deckOfShip;
 
-		auto seventhShip = std::make_shared<oneDecker>("e1");
+		auto seventhShip = std::make_shared<oneDecker>("e0");
 		deckOfShip = Cell(seventhShip);
 		sea[0][4] = deckOfShip;
 
-		auto eigthShip = std::make_shared<oneDecker>("e3");
+		auto eigthShip = std::make_shared<oneDecker>("e2");
 		deckOfShip = Cell(eigthShip);
 		sea[2][4] = deckOfShip;
 		
-		auto ninthShip = std::make_shared<oneDecker>("e5");
+		auto ninthShip = std::make_shared<oneDecker>("e4");
 		deckOfShip = Cell(ninthShip);
 		sea[4][4] = deckOfShip;
 
-		auto tenthShip = std::make_shared<oneDecker>("e7");
+		auto tenthShip = std::make_shared<oneDecker>("e6");
 		deckOfShip = Cell(tenthShip);
 		sea[6][4] = deckOfShip;
 	}
@@ -189,7 +189,7 @@ condition oneDecker::damage()
 {
 	--hp;
 	if (hp == 0)
-		return death();
+		return KillOneDeck;
 	else
 		return Wound;
 }
@@ -198,7 +198,7 @@ condition twoDecker::damage()
 {
 	--hp;
 	if (hp == 0)
-		return death();
+		return KillTwoDeck;
 	else
 		return Wound;
 }
@@ -206,7 +206,7 @@ condition threeDecker::damage()
 {
 	--hp;
 	if (hp == 0)
-		return death();
+		return KillThreeDeck;
 	else
 		return Wound;
 }
@@ -215,7 +215,7 @@ condition fourDecker::damage()
 {
 	--hp;
 	if (hp == 0)
-		return death();
+		return KillFourDeck;
 	else
 		return Wound;
 }
