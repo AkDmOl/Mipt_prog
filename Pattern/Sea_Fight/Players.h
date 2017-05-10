@@ -3,14 +3,12 @@
 #include "Fleet.h"
 #include <string>
 
-
 class Player
 {
 	public:
-		//return -1 if sea, 0 if wound, 1 - kill oneDecker, 2 - twoDecker etc.
-		virtual int shot(Player* p) = 0;
-		virtual int check(std::string cell) = 0;
-		virtual void show_fleet() = 0;
+		virtual condition shot(std::shared_ptr<Player> p, mode mod) = 0;
+		virtual condition check(std::string cell) = 0;
+		virtual std::shared_ptr<Ship> returnChips(std::string cell) {};
 		virtual ~Player() {};
 	protected:
 		Player() {};
@@ -20,43 +18,46 @@ class Player
 class Shot
 {
 	public:
+		virtual condition fire(std::string cell) = 0;
 		virtual ~Shot() {};
-		virtual void fire(std::string cell) = 0;
 	protected:
-		Shot(Player* p) : victim(p) {};
-		Player* victim;
+		Shot(std::shared_ptr<Player> p) : victim(p) {};
+		std::shared_ptr<Player> victim;
 };
 
 class Aim : public Shot
 {
 	public:
-		Aim(Player* p) : Shot(p) {};
-		void fire(std::string cell);
+		Aim(std::shared_ptr<Player> p) : Shot(p) {};
+		condition fire(std::string cell);
+		~Aim() { };
 };
 
 class CompPlayer : public Player
 {
 	public:
 		CompPlayer();
+		condition shot(std::shared_ptr<Player> p, mode mod);
+		//std::shared_ptr<Ship> getKilledShip(Player* p, std::string cell);
+		condition check(std::string cell);
+		void showFleet();
 		~CompPlayer() {};
-		int shot(Player* p);
-		int check(std::string cell);
-		void show_fleet();
 	private:
 		Fleet myFleet;
-		std::vector<std::vector<int>> shots;
+		std::vector<std::vector<condition>> shots;
 };
 
 class HumPlayer : public Player
 {
 	public:
-		~HumPlayer() {};
 		HumPlayer();
-		int shot(Player* p);
-		int check(std::string cell);
-		void show_fleet();
+		condition shot(std::shared_ptr<Player> p, mode mod);
+		std::shared_ptr<Ship> returnChips(std::string cell);
+		condition check(std::string cell);
+		void showFleet();
+		~HumPlayer() {};
 	private:
 		Fleet myFleet;
-		std::vector<std::vector<int>> shots;
+		std::vector<std::vector<condition>> shots;
 };
 
