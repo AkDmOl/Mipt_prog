@@ -23,6 +23,7 @@ class Cell
 	public:
 		Cell(): cond(Sea), vessel(NULL) {};
 		Cell(std::shared_ptr<Ship> ves): cond(OneDeckOfShip), vessel(ves) {};
+		void setCond(condition newCond) { cond = newCond; };
 		condition getCond() { return cond; };
 		std::shared_ptr<Ship> getShip() { return vessel; };
 		~Cell() {};
@@ -36,7 +37,7 @@ class oneDecker: public Ship
 	public:
 		oneDecker(std::string Start): hp(1), start(Start), end(Start) {};
 		condition damage();
-		condition death() { return KillOneDeck; };
+		condition death() { this->~oneDecker(); return KillOneDeck; };
 		~oneDecker() {};
 	private:
 		int hp;
@@ -49,7 +50,7 @@ class twoDecker: public Ship
 	public:
 		twoDecker(std::string Start, std::string End): hp(2), start(Start), end(End) {};
 		condition damage();
-		condition death() { return KillTwoDeck; };
+		condition death() { this->~twoDecker(); return KillTwoDeck; };
 		~twoDecker() {};
 	private:
 		int hp;
@@ -62,7 +63,7 @@ class threeDecker: public Ship
 	public:
 		threeDecker(std::string Start, std::string End): hp(3), start(Start), end(End) {};
 		condition damage();
-		condition death() { return KillThreeDeck; };
+		condition death() { this->~threeDecker(); return KillThreeDeck; };
 		~threeDecker() {};
 	private:
 		int hp;
@@ -75,7 +76,7 @@ class fourDecker: public Ship
 	public:
 		fourDecker(std::string Start, std::string End): hp(4), start(Start), end(End) {};
 		condition damage();
-		condition death() { return KillFourDeck; };
+		condition death() { this->~fourDecker(); return KillFourDeck; };
 		~fourDecker() {};
 	private:
 		int hp;

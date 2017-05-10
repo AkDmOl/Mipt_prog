@@ -6,7 +6,7 @@ condition Aim::fire(std::string cell)
 }
 
 
-CompPlayer::CompPlayer() : myFleet(Fleet("computer"))
+CompPlayer::CompPlayer() : myFleet(Fleet("computer")), countShips(10)
 {
 	for (int i = 0; i < 10; ++i)
 	{
@@ -25,7 +25,7 @@ std::shared_ptr<Ship> CompPlayer::getKilledShip(Player* p, std::string cell)
 	return p->returnChips(cell);
 }
 */
-condition CompPlayer::shot(std::shared_ptr<Player> p, mode mod)
+condition CompPlayer::shot(std::shared_ptr<Player> p, mode mod = Recce)
 {
 	//some tactics for shot and mod
 	std::string cell = "a0";
@@ -57,7 +57,7 @@ std::shared_ptr<Ship> HumPlayer::returnChips(std::string cell)
 	return myFleet.returnChips(cell);	
 }
 
-HumPlayer::HumPlayer() : myFleet(Fleet("human")) 
+HumPlayer::HumPlayer() : myFleet(Fleet("human")), countShips(10)
 {
 	for (int i = 0; i < 10; ++i)
 	{
@@ -71,7 +71,7 @@ void HumPlayer::showFleet()
 	myFleet.show(shots);
 }
 
-condition HumPlayer::shot(std::shared_ptr<Player> p, mode mod)
+condition HumPlayer::shot(std::shared_ptr<Player> p)
 {
 
 	std::string cell;

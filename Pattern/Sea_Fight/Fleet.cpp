@@ -175,6 +175,7 @@ condition Fleet::check(std::string cell)
 			return Sea;
 		case OneDeckOfShip:
 			std::shared_ptr<Ship> curShip =  (sea[cell[1] - '0'][cell[0] - 49 - '0']).getShip();
+			(sea[cell[1] - '0'][cell[0] - 49 - '0']).setCond(Wound); 
 			return curShip->damage();
 	}
 }
