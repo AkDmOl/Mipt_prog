@@ -1,3 +1,0 @@
-I've been created in branch_to_rebase
-
-This change has been made in rebased branch, but the initial "branch_to_be_rebased" has been merged, before rebase has been pushed
